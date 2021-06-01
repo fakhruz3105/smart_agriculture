@@ -50,3 +50,10 @@ if (! function_exists('homeRoute')) {
         return 'frontend.index';
     }
 }
+
+if(!function_exists('humidityFormat')){
+
+    function humidityFormat($data){
+        return round($data, 2). " %";
+    }
+}

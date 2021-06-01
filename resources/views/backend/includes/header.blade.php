@@ -10,6 +10,7 @@
                     <div class="slider round open_miniSide"></div>
                 </label>
 
+                @if(auth()->user())
                 <div class="header_right d-flex justify-content-between align-items-center">
                     <div class="profile_info">
                         <img src="{{ asset('assets/img/client_img.png') }}" alt="#">
@@ -32,6 +33,15 @@
                         </div>
                     </div>
                 </div>
+                @else
+                    <div class="float-lg-right float-none common_tab_btn justify-content-end">
+                        <ul class="nav">
+                            <li class="nav-item">
+                                <a class="nav-link active" href="{{ route('frontend.auth.login') }}">{{ __('Login') }}</a>
+                            </li>
+                        </ul>
+                    </div>
+                @endif
             </div>
         </div>
     </div>

@@ -136,7 +136,7 @@ var options1 = {
         }
     },
     colors: [ "#F65365" , "#E5EAEE"],
-    
+
     markers: {
         size: 6,
         colors: ['#fff'],
