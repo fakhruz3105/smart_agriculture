@@ -55,55 +55,32 @@
         <div class="container-fluid p-0">
             <div class="row justify-content-center">
                 @yield('content')
-                <div class="col-xl-8 ">
-                    <div class="white_card mb_30 card_height_100">
-                        <div class="white_card_header">
-                            <div class="box_header m-0">
-                                <div class="main-title">
-                                    <h3 class="m-0">Revenue</h3>
-                                </div>
-                                <div class="float-lg-right float-none common_tab_btn2 justify-content-end">
-                                    <ul class="nav">
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="#">Month</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link active" href="#">Week</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="#">Day</a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="white_card_body">
-                            <div id="marketchart"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xl-4">
+                <div class="col-xl-12">
                     <div class="white_card card_height_100 mb_30">
                         <div class="white_card_header">
                             <div class="box_header m-0">
                                 <div class="main-title">
-                                    <h3 class="m-0">Visitors by Browser</h3>
-                                    <span>15654 Visaitors</span>
+                                    <h3 class="m-0">Analytic</h3>
                                 </div>
                                 <div class="float-lg-right float-none common_tab_btn justify-content-end">
                                     <ul class="nav">
                                         <li class="nav-item">
-                                            <a class="nav-link active" href="#">Week</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="#">Day</a>
+                                            <a class="nav-link active" href="{{ route('frontend.auth.login') }}">{{ __('Login') }}</a>
                                         </li>
                                     </ul>
                                 </div>
                             </div>
                         </div>
                         <div class="white_card_body">
-                            <div id="chart-currently"></div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div id="marketchart"></div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div id="chart-currently"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
