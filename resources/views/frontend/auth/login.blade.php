@@ -1,70 +1,35 @@
-@extends('frontend.layouts.app')
-
-@section('title', __('Login'))
+@extends('frontend.layouts.auth')
 
 @section('content')
-    <div class="container py-4">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <x-frontend.card>
-                    <x-slot name="header">
-                        @lang('Login')
-                    </x-slot>
+    <div class="col-lg-12">
+        <div class="white_box mb_30">
+            <div class="row justify-content-center">
 
-                    <x-slot name="body">
-                        <x-forms.post :action="route('frontend.auth.login')">
-                            <div class="form-group row">
-                                <label for="email" class="col-md-4 col-form-label text-md-right">@lang('E-mail Address')</label>
-
-                                <div class="col-md-6">
+                <div class="col-lg-6">
+                    <!-- sign_in  -->
+                    <div class="modal-content cs_modal">
+                        <div class="modal-header justify-content-center theme_bg_1">
+                            <h5 class="modal-title text_white">Log in</h5>
+                        </div>
+                        <div class="modal-body">
+                            <x-forms.post :action="route('frontend.auth.login')">
+                                <div class="form-group">
                                     <input type="email" name="email" id="email" class="form-control" placeholder="{{ __('E-mail Address') }}" value="{{ old('email') }}" maxlength="255" required autofocus autocomplete="email" />
                                 </div>
-                            </div><!--form-group-->
-
-                            <div class="form-group row">
-                                <label for="password" class="col-md-4 col-form-label text-md-right">@lang('Password')</label>
-
-                                <div class="col-md-6">
+                                <div class="form-group">
                                     <input type="password" name="password" id="password" class="form-control" placeholder="{{ __('Password') }}" maxlength="100" required autocomplete="current-password" />
                                 </div>
-                            </div><!--form-group-->
-
-                            <div class="form-group row">
-                                <div class="col-md-6 offset-md-4">
-                                    <div class="form-check">
-                                        <input name="remember" id="remember" class="form-check-input" type="checkbox" {{ old('remember') ? 'checked' : '' }} />
-
-                                        <label class="form-check-label" for="remember">
-                                            @lang('Remember Me')
-                                        </label>
-                                    </div><!--form-check-->
+                                <button type="submit" class="btn_1 full_width text-center">Log in</button>
+                                <p>Need an account? <a data-toggle="modal" data-target="#sing_up" data-dismiss="modal"  href="#"> Sign Up</a></p>
+                                <div class="text-center">
+                                    <a href="{{ route('frontend.auth.password.request') }}" class="pass_forget_btn">Forgot Password?</a>
                                 </div>
-                            </div><!--form-group-->
+                            </x-forms.post>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-                            @if(config('boilerplate.access.captcha.login'))
-                                <div class="row">
-                                    <div class="col">
-                                        @captcha
-                                        <input type="hidden" name="captcha_status" value="true" />
-                                    </div><!--col-->
-                                </div><!--row-->
-                            @endif
-
-                            <div class="form-group row mb-0">
-                                <div class="col-md-8 offset-md-4">
-                                    <button class="btn btn-primary" type="submit">@lang('Login')</button>
-
-                                    <x-utils.link :href="route('frontend.auth.password.request')" class="btn btn-link" :text="__('Forgot Your Password?')" />
-                                </div>
-                            </div><!--form-group-->
-
-                            <div class="text-center">
-                                @include('frontend.auth.includes.social')
-                            </div>
-                        </x-forms.post>
-                    </x-slot>
-                </x-frontend.card>
-            </div><!--col-md-8-->
-        </div><!--row-->
-    </div><!--container-->
+        </div>
+    </div>
 @endsection
