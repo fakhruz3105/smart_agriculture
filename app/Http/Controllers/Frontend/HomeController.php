@@ -13,11 +13,6 @@ class HomeController
 
     public function index(){
 
-//        $new_data = new Dataset();
-//        $new_data->humidity = rand(7, 30);
-//        $new_data->save();
-
-
         $today_data = Dataset::whereDate('created_at', Carbon::today())
             ->pluck('humidity')->collect();
 
@@ -79,5 +74,14 @@ class HomeController
         $weekly['min'] = $min_arr;
 
         return view('frontend.index', compact('data_summary', 'categories', 'data', 'weekly'));
+    }
+
+    public function insert(){
+
+        $new_data = new Dataset();
+        $new_data->humidity = rand(7, 30);
+        $new_data->save();
+
+        return redirect()->back()->withFlashSuccess('New data inserted.');
     }
 }

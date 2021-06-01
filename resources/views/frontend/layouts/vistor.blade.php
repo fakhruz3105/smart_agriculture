@@ -34,6 +34,8 @@
     @include('backend.includes.header')
 
     <div class="m-5">
+{{--        @include('includes.partials.announcements')--}}
+        @include('includes.partials.messages')
         @yield('content')
     </div>
 </section>

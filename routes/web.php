@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\LocaleController;
+use Illuminate\Support\Facades\Route;
 
 /*
  * Global Routes
@@ -26,3 +27,6 @@ Route::group(['as' => 'frontend.'], function () {
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'admin'], function () {
     includeRouteFiles(__DIR__.'/backend/');
 });
+
+Route::get('api/send-data', [\App\Http\Controllers\Frontend\HomeController::class, 'insert'])->name('api.send');
+

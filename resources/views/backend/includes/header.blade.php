@@ -37,6 +37,7 @@
                     <div class="float-lg-right float-none common_tab_btn justify-content-end">
                         <ul class="nav">
                             <li class="nav-item">
+                                <a class="nav-link" href="{{ route('api.send') }}">{{ __('Test') }}</a>
                                 <a class="nav-link active" href="{{ route('frontend.auth.login') }}">{{ __('Login') }}</a>
                             </li>
                         </ul>
