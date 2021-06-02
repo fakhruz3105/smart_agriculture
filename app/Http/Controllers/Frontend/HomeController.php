@@ -13,23 +13,23 @@ class HomeController
 
     public function index(){
 
-        $today_data = Dataset::whereDate('created_at', Carbon::today())
-            ->pluck('humidity')->collect();
+//        $today_data = Dataset::whereDate('created_at', Carbon::today())
+//            ->pluck('humidity')->collect();
 
         $summary = DataSummary::whereDate('created_at', Carbon::today())
             ->first();
 
-        if(!$summary){
-            $summary = new DataSummary();
-        }
-
-        $arr['highest_humidity'] = $today_data->max();
-        $arr['lowest_humidity'] = $today_data->min();
-        $arr['average_humidity'] = $today_data->avg();
-        $arr['total_collected'] = $today_data->count();
-
-        $summary->collection = json_encode($arr);
-        $summary->save();
+//        if(!$summary){
+//            $summary = new DataSummary();
+//        }
+//
+//        $arr['highest_humidity'] = $today_data->max();
+//        $arr['lowest_humidity'] = $today_data->min();
+//        $arr['average_humidity'] = $today_data->avg();
+//        $arr['total_collected'] = $today_data->count();
+//
+//        $summary->collection = json_encode($arr);
+//        $summary->save();
         $data_summary = json_decode($summary->collection);
 
         $graph_collect = $today_data = Dataset::whereDate('created_at', Carbon::today())
@@ -38,12 +38,111 @@ class HomeController
             ->get()
             ->collect();
 
-        $data = [];
+        $humidity = [];
+        $ph = [];
         $categories = [];
         foreach ($graph_collect as $collect){
             $categories[] = Carbon::parse($collect->created_at)->format('h:i A');
-            $data[] = $collect->humidity;
+            $humidity[] = round($collect->humidity, 2);
+            $ph[] = round($collect->ph, 2);
+            $temperature[] = round($collect->ph, 2);
         }
+
+        $area = [
+            'humidity' => $humidity,
+            'ph' => $ph,
+            'temperature' => $temperature
+        ];
+
+        $this_week = Carbon::today()->addDays('-7');
+        $day = 1;
+        $date = [];
+        do{
+            $current_day = $this_week->addDay();
+
+            $date[] = $current_day->format('l');
+
+            $prev_summary = DataSummary::whereDate('created_at', $current_day)->first();
+            $avg_humidity = $avg_temperature = $avg_ph = 0;
+
+            if($prev_summary){
+                $decode = json_decode($prev_summary->collection);
+
+                $avg_humidity = round($decode->humidity->average, 2);
+                $avg_temperature = round($decode->temperature->average, 2);
+                $avg_ph = round($decode->ph->average, 2);
+            }
+
+            $arr_h[] = $avg_humidity;
+            $arr_t[] = $avg_temperature;
+            $arr_p[] = $avg_ph;
+            $day++;
+        }while($day<=7);
+
+        $weekly['date'] = $date;
+        $weekly['humidity'] = $arr_h;
+        $weekly['temperature'] = $arr_t;
+        $weekly['ph'] = $arr_p;
+
+        $weekly['date'][6] = $current_day->format('l')." (Today)";
+
+        return view('frontend.index', compact('data_summary', 'categories', 'area', 'weekly', 'summary'));
+    }
+
+    public function insert(){
+
+        $new_data = new Dataset();
+        $new_data->humidity = rand(7, 30);
+        $new_data->ph = rand(3.1, 8.9);
+        $new_data->temperature = rand(18.1, 38.9);
+        $new_data->save();
+
+        return redirect()->back()->withFlashSuccess('New data inserted.');
+    }
+
+    public function updateSummary(){
+
+        $today_data = Dataset::whereDate('created_at', Carbon::today())->get()->collect();
+
+        $summary = DataSummary::whereDate('created_at', Carbon::today())
+            ->first();
+
+        if(!$summary){
+            updateSummary();
+            $summary = DataSummary::whereDate('created_at', Carbon::today())
+                ->first();
+        }
+
+        $humidity = $today_data->pluck('humidity');
+        $temperature = $today_data->pluck('temperature');
+        $ph = $today_data->pluck('ph');
+
+        $data['total']   = $today_data->count();
+        $data['humidity'] = [
+            'highest' => $humidity->max(),
+            'lowest'  => $humidity->min(),
+            'average' => $humidity->avg(),
+        ];
+        $data['temperature'] = [
+            'highest' => $temperature->max(),
+            'lowest'  => $temperature->min(),
+            'average' => $temperature->avg(),
+        ];
+
+        $data['ph'] = [
+            'highest' => $ph->max(),
+            'lowest'  => $ph->min(),
+            'average' => $ph->avg(),
+        ];
+
+        $summary->collection = json_encode($data);
+        $summary->save();
+
+        return response()->json(['success', 'message' => 'Summary data updated!']);
+
+    }
+
+    public function old(){
 
         $this_week = Carbon::today()->addDays('-7');
         $day = 1;
@@ -68,20 +167,7 @@ class HomeController
             $day++;
         }while($day<=7);
 
-        $weekly['date'] = $date;
-        $weekly['avg'] = $avg_arr;
-        $weekly['max'] = $max_arr;
-        $weekly['min'] = $min_arr;
 
-        return view('frontend.index', compact('data_summary', 'categories', 'data', 'weekly'));
-    }
-
-    public function insert(){
-
-        $new_data = new Dataset();
-        $new_data->humidity = rand(7, 30);
-        $new_data->save();
-
-        return redirect()->back()->withFlashSuccess('New data inserted.');
+        dd('ok');
     }
 }

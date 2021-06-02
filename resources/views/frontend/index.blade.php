@@ -36,7 +36,9 @@
                     <div class="white_card_header">
                         <div class="main-title">
                             <h3 class="m-0">Summary</h3>
-                            <span>Summary data will refresh every 1 hour</span>
+                            <span>Summary data will refresh every 1 hour <br>
+                                <b>Last updated at : {{ detetimeFormat($summary->updated_at, 'h:i A') }}</b>
+                            </span>
                         </div>
                     </div>
                     <div class="media_thumb">
@@ -45,20 +47,20 @@
                     <div class="media_card_body">
                         <div class="media_card_list">
                             <div class="single_media_card">
-                                <span>Highest Humidity</span>
-                                <h3>{{ humidityFormat($data_summary->highest_humidity) }}</h3>
-                            </div>
-                            <div class="single_media_card">
-                                <span>Lowest Humidity</span>
-                                <h3>{{ humidityFormat($data_summary->lowest_humidity) }}</h3>
-                            </div>
-                            <div class="single_media_card">
                                 <span>Average Humidity</span>
-                                <h3>{{ humidityFormat($data_summary->average_humidity) }}</h3>
+                                <h3>{{ humidityFormat($data_summary->humidity->average) }}</h3>
+                            </div>
+                            <div class="single_media_card">
+                                <span>Average Temperature</span>
+                                <h3>{{ temperatureFormat($data_summary->temperature->average) }}</h3>
+                            </div>
+                            <div class="single_media_card">
+                                <span>Average PH</span>
+                                <h3>{{ phFormat($data_summary->ph->average) }}</h3>
                             </div>
                             <div class="single_media_card">
                                 <span>Total Data Collected (Today)</span>
-                                <h3>{{ $data_summary->total_collected }}</h3>
+                                <h3>{{ $data_summary->total }}</h3>
                             </div>
                         </div>
                     </div>
@@ -79,11 +81,11 @@
                 enabled: false
             },
             series: [
-                {
-                    name: "Humidity (%)",
-                    data: @json($data)
-                }
+                {name: "Humidity (%)", data: @json($area['humidity'])},
+                {name: "Temperature (°C)", data: @json($area['temperature'])},
+                {name: "Ph ", data: @json($area['ph'])}
             ],
+            colors: [ "#0b7bd6" , "#ff001c", "#2be314"],
             fill: {
                 type: "gradient",
                 gradient: {
@@ -111,9 +113,9 @@
                 },
             },
             series: [
-                {name: 'Average (%)', data: @json($weekly['avg'])},
-                {name: 'Highest (%)', data: @json($weekly['max'])},
-                {name: 'Lowest (%)', data: @json($weekly['min'])}
+                {name: 'Humidity (%)', data: @json($weekly['humidity'])},
+                {name: 'Temperature (°C)', data: @json($weekly['temperature'])},
+                {name: 'Ph ', data: @json($weekly['ph'])}
                 ],
             plotOptions: {
                 bar: {

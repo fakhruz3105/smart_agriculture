@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\LocaleController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Frontend\HomeController;
 
 /*
  * Global Routes
@@ -28,5 +29,6 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'admin'], f
     includeRouteFiles(__DIR__.'/backend/');
 });
 
-Route::get('api/send-data', [\App\Http\Controllers\Frontend\HomeController::class, 'insert'])->name('api.send');
+Route::get('api/send-data', [HomeController::class, 'insert'])->name('api.send');
+Route::get('cron/summary', [HomeController::class, 'updateSummary'])->name('cron.update');
 
