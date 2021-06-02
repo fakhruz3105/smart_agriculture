@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Frontend;
 use App\Models\Dataset;
 use App\Models\DataSummary;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\VarDumper\Cloner\Data;
+use Illuminate\Http\Request;
 
 
 class HomeController
@@ -42,7 +42,7 @@ class HomeController
             $categories[] = Carbon::parse($collect->created_at)->format('h:i A');
             $humidity[] = round($collect->humidity, 2);
             $ph[] = round($collect->ph, 2);
-            $temperature[] = round($collect->ph, 2);
+            $temperature[] = round($collect->temperature, 2);
         }
 
         $area = [

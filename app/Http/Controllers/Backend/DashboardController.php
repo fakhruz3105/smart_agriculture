@@ -41,7 +41,7 @@ class DashboardController
             $categories[] = Carbon::parse($collect->created_at)->format('h:i A');
             $humidity[] = $collect->humidity;
             $ph[] = $collect->ph;
-            $temperature[] = $collect->ph;
+            $temperature[] = $collect->temperature;
         }
 
         $area = [
