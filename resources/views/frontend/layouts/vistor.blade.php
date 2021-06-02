@@ -33,7 +33,7 @@
 <section class="">
     @include('backend.includes.header')
 
-    <div class="m-5">
+    <div class="m-lg-5">
 {{--        @include('includes.partials.announcements')--}}
         @include('includes.partials.messages')
         @yield('content')
