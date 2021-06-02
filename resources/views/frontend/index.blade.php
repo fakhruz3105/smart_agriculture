@@ -1,7 +1,7 @@
 @extends('frontend.layouts.vistor')
 
 @section('content')
-    <div class="container-fluid p-0">
+    <div class="container-fluid p-0 mt-2">
         <div class="row justify-content-center">
             <div class="col-xl-12">
                 <div class="white_card card_height_100 mb_30">
