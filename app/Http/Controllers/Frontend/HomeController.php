@@ -111,6 +111,7 @@ class HomeController
             $messages = $validator->getMessageBag();
             return response()->json(['status' => 'error', 'message' => $messages->first()]);
         }
+
         $key = env('PI_KEY', 'MSJ9ZXIGyli0pbpEmKmZyhjee660U4dy');
 
         if($request->key != $key){

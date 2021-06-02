@@ -33,5 +33,5 @@ Route::get('api/send-data', [HomeController::class, 'insert'])->name('api.send')
 
 Route::get('cron/summary', [HomeController::class, 'updateSummary'])->name('cron.update');
 
-Route::post('api/pi3-insert',[HomeController::class, 'pi3'])->name('api.send');
+Route::get('api/pi3-insert',[HomeController::class, 'pi3'])->name('api.send');
 
