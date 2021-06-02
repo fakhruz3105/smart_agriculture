@@ -100,17 +100,17 @@ class HomeController
     public function pi3(Request $request){
 
 
-        $validator = Validator::make($request->all(), [
-            'key' => 'required',
-            'humidity' => 'required',
-            'temperature' => 'required',
-            'ph' => 'required'
-        ]);
-
-        if($validator->fails()) {
-            $messages = $validator->getMessageBag();
-            return response()->json(['status' => 'error', 'message' => $messages->first()]);
-        }
+//        $validator = Validator::make($request->all(), [
+//            'key' => 'required',
+//            'humidity' => 'required',
+//            'temperature' => 'required',
+//            'ph' => 'required'
+//        ]);
+//
+//        if($validator->fails()) {
+//            $messages = $validator->getMessageBag();
+//            return response()->json(['status' => 'error', 'message' => $messages->first()]);
+//        }
 
         $key = env('PI_KEY', 'MSJ9ZXIGyli0pbpEmKmZyhjee660U4dy');
 
