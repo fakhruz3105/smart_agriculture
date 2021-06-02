@@ -19,9 +19,11 @@ class HomeController
         $summary = DataSummary::whereDate('created_at', Carbon::today())
             ->first();
 
-//        if(!$summary){
-//            $summary = new DataSummary();
-//        }
+        if(!$summary){
+            updateSummary();
+            $summary = DataSummary::whereDate('created_at', Carbon::today())
+                ->first();
+        }
 //
 //        $arr['highest_humidity'] = $today_data->max();
 //        $arr['lowest_humidity'] = $today_data->min();
