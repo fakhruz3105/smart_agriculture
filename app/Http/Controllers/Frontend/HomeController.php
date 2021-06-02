@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Frontend;
 use App\Models\Dataset;
 use App\Models\DataSummary;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Validator;
 use Symfony\Component\VarDumper\Cloner\Data;
 
 
@@ -24,14 +26,7 @@ class HomeController
             $summary = DataSummary::whereDate('created_at', Carbon::today())
                 ->first();
         }
-//
-//        $arr['highest_humidity'] = $today_data->max();
-//        $arr['lowest_humidity'] = $today_data->min();
-//        $arr['average_humidity'] = $today_data->avg();
-//        $arr['total_collected'] = $today_data->count();
-//
-//        $summary->collection = json_encode($arr);
-//        $summary->save();
+
         $data_summary = json_decode($summary->collection);
 
         $graph_collect = $today_data = Dataset::whereDate('created_at', Carbon::today())
@@ -100,6 +95,35 @@ class HomeController
         $new_data->save();
 
         return redirect()->back()->withFlashSuccess('New data inserted.');
+    }
+
+    public function pi3(Request $request){
+
+
+        $validator = Validator::make($request->all(), [
+            'key' => 'required',
+            'humidity' => 'required',
+            'temperature' => 'required',
+            'ph' => 'required'
+        ]);
+
+        if($validator->fails()) {
+            $messages = $validator->getMessageBag();
+            return response()->json(['status' => 'error', 'message' => $messages->first()]);
+        }
+        $key = env('PI_KEY', 'MSJ9ZXIGyli0pbpEmKmZyhjee660U4dy');
+
+        if($request->key != $key){
+            return response()->json(['status' => 'error', 'message' => 'Invalid PI key!']);
+        }
+
+        $new_data = new Dataset();
+        $new_data->humidity = $request->humidity;
+        $new_data->ph = $request->ph;
+        $new_data->temperature = $request->temperature;
+        $new_data->save();
+
+        return response()->json(['success' => 'error', 'message' =>'Data inserted']);
     }
 
     public function updateSummary(){
