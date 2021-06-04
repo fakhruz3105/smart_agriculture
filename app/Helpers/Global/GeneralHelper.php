@@ -2,7 +2,9 @@
 
 use App\Models\Dataset;
 use App\Models\DataSummary;
+use App\Models\Setting;
 use Carbon\Carbon;
+use App\Models\LiveData;
 
 if (! function_exists('appName')) {
     /**
@@ -74,6 +76,13 @@ if(!function_exists('phFormat')){
     }
 }
 
+if(!function_exists('litreFormat')){
+
+    function litreFormat($data){
+        return round($data, 2). " L";
+    }
+}
+
 if(!function_exists('detetimeFormat')){
 
     function detetimeFormat($date, $format = 'h:i:s A, d-m-Y'){
@@ -118,5 +127,81 @@ if(!function_exists('updateSummary')){
 
         $summary->collection = json_encode($data);
         $summary->save();
+    }
+}
+
+if(!function_exists('litrePerminute')){
+
+    function litrePerminute(){
+        return 3;
+    }
+}
+
+if(!function_exists('calculateUsage')){
+
+    function calculateUsage($start, $end){
+
+        $start = Carbon::parse($start);
+        $end = Carbon::parse($end);
+
+        $diff = $end->diffInMinutes($start);
+        $perlitre = litrePerminute();
+
+        return $diff*$perlitre;
+
+    }
+}
+
+if(!function_exists('getValveStatus')){
+
+    function getValveStatus(){
+
+        $setting = Setting::where('name', 'pipe')
+            ->first();
+
+        return $setting->value;
+    }
+}
+
+
+if(!function_exists('reformatTime')){
+
+    function reformatTime($time){
+
+        $pieces = explode(":", $time);
+
+        if(count($pieces) != 3){
+            return __('Invalid Time');
+        }
+        if($pieces[0] == 0){
+            return (int)$pieces[1]." mins";
+        }
+
+        return (int)$pieces[0]." hours ".(int)$pieces[1]." mins";
+    }
+}
+
+if(!function_exists('updateLive')){
+
+    function updateLive($humidity, $ph, $temperature){
+
+        $live = LiveData::find(1);
+
+        $live->humidity = $humidity;
+        $live->ph = $ph;
+        $live->temperature = $temperature;
+        $live->save();
+
+        return true;
+    }
+}
+
+
+if(!function_exists('getLive')){
+
+    function getLive(){
+
+        $live = LiveData::find(1);
+        return $live;
     }
 }

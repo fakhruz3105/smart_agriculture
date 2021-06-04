@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Models\Dataset;
 use App\Models\DataSummary;
+use App\Models\Setting;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\VarDumper\Cloner\Data;
@@ -94,23 +95,11 @@ class HomeController
         $new_data->temperature = rand(18.1, 38.9);
         $new_data->save();
 
+        updateLive($new_data->humidity, $new_data->ph, $new_data->temperature);
         return redirect()->back()->withFlashSuccess('New data inserted.');
     }
 
     public function pi3(Request $request){
-
-
-//        $validator = Validator::make($request->all(), [
-//            'key' => 'required',
-//            'humidity' => 'required',
-//            'temperature' => 'required',
-//            'ph' => 'required'
-//        ]);
-//
-//        if($validator->fails()) {
-//            $messages = $validator->getMessageBag();
-//            return response()->json(['status' => 'error', 'message' => $messages->first()]);
-//        }
 
         $key = env('PI_KEY', 'MSJ9ZXIGyli0pbpEmKmZyhjee660U4dy');
 
@@ -124,7 +113,20 @@ class HomeController
         $new_data->temperature = $request->temperature;
         $new_data->save();
 
-        return response()->json(['success' => 'error', 'message' =>'Data inserted']);
+        updateLive($new_data->humidity, $new_data->ph, $new_data->temperature);
+        return response()->json(['status' => 'success', 'message' =>'Data inserted']);
+    }
+
+    public function pi3Valve(Request $request){
+
+        $key = env('PI_KEY', 'MSJ9ZXIGyli0pbpEmKmZyhjee660U4dy');
+
+        if($request->key != $key){
+            return response()->json(['status' => 'error', 'message' => 'Invalid PI key!']);
+        }
+
+        $setting = Setting::where('name', 'pipe')->first();
+        return response()->json(['data' => $setting->value]);
     }
 
     public function updateSummary(){

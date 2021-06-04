@@ -18,6 +18,26 @@
                 </div>
             </a>
         </li>
+        <li>
+            <a href="{{ route('admin.water.valve-switch') }}" aria-expanded="false">
+                <div class="nav_icon_small">
+                    <img src="{{ asset('assets/img/menu-icon/dashboard.svg') }}" alt="">
+                </div>
+                <div class="nav_title">
+                    <span>Water Switch</span>
+                </div>
+            </a>
+        </li>
+        <li>
+            <a href="{{ route('admin.water.index') }}" aria-expanded="false">
+                <div class="nav_icon_small">
+                    <img src="{{ asset('assets/img/menu-icon/dashboard.svg') }}" alt="">
+                </div>
+                <div class="nav_title">
+                    <span>Water Usage</span>
+                </div>
+            </a>
+        </li>
         @if($logged_in_user->hasAllAccess())
         <li class="">
             <a class="has-arrow" href="#" aria-expanded="false">
