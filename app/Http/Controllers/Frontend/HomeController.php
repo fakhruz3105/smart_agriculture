@@ -126,6 +126,8 @@ class HomeController
         }
 
         $setting = Setting::where('name', 'pipe')->first();
+
+//        return $setting->value;
         return response()->json(['data' => $setting->value]);
     }
 

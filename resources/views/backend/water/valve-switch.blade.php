@@ -34,7 +34,7 @@
                                 <h3><span class="text-success">{{ detetimeFormat($usage->start, 'h:i A') }}</span></h3>
                             </div>
                             <div class="col-6 col-sm-6">
-                                <h6>Total Litre Used</h6>
+                                <h6>Total Water Consumed(L)</h6>
                                 <h3><span class="text-warning font-weight-bold">{{ litreFormat(calculateUsage($usage->start, \Carbon\Carbon::now())) }}</span></h3>
                             </div>
                         </div>
