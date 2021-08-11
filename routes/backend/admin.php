@@ -18,6 +18,12 @@ Route::group([
     'prefix' => 'water/'
 ], function (){
     Route::get('', [WaterController::class, 'index'])->name('index');
+    Route::get('create', [WaterController::class, 'create'])->name('create');
+    Route::post('create', [WaterController::class, 'store'])->name('store');
+    Route::get('edit/{id}', [WaterController::class, 'edit'])->name('edit');
+    Route::post('edit/{id}', [WaterController::class, 'update'])->name('update');
+
+
     Route::get('valve-switch', [WaterController::class, 'valveSwitch'])->name('valve-switch');
     Route::post('valve-switch', [WaterController::class, 'valveChange'])->name('valve-change');
 });

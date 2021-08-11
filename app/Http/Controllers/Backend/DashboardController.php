@@ -34,8 +34,7 @@ class DashboardController
             ->get()
             ->collect();
 
-        $humidity = [];
-        $ph = [];
+        $temperature = $humidity = $ph = [];
         $categories = [];
         foreach ($graph_collect as $collect){
             $categories[] = Carbon::parse($collect->created_at)->format('h:i A');

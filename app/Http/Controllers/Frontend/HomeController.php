@@ -36,6 +36,7 @@ class HomeController
             ->get()
             ->collect();
 
+        $temperature = [];
         $humidity = [];
         $ph = [];
         $categories = [];

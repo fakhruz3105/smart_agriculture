@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Domains\Auth\Http\Requests\Backend\Water\ChangeRequest;
+use App\Http\Requests\Backend\Water\CreateRequest;
 use App\Models\Dataset;
 use App\Models\DataSummary;
 use App\Models\Setting;
+use App\Models\WaterSchedule;
 use App\Models\WaterUsage;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 
 /**
  * Class DashboardController.
@@ -17,10 +20,22 @@ class WaterController
 
     public function index(){
 
-        $water = WaterUsage::whereDate('created_at', Carbon::today())
-            ->get();
+        $day = 0;
+        do{
+            $date = Carbon::today()->addDays(-$day);
+            $sum = WaterUsage::whereDate('created_at', $date)->sum('litre');
+            $data[] = [
+                0 => $date->format('d M'),
+                1 => $sum
+            ];
+            $day++;
+        }while($day <= 7);
 
-        return view('backend.water.index', compact('water'));
+
+        $schedules = WaterSchedule::get();
+
+
+        return view('backend.water.index', compact('data', 'schedules'));
     }
 
     public function valveSwitch(){
@@ -78,5 +93,40 @@ class WaterController
 
             return redirect()->back()->withFlashSuccess("Turned off. Usage: $water->litre L of water for $reformatTime");
         }
+    }
+
+    public function create(){
+
+        return view('backend.water.create');
+    }
+
+    public function store(CreateRequest $request){
+
+        $schedule         = new WaterSchedule();
+        $schedule->start  = Carbon::parse($request->start);
+        $schedule->end    = Carbon::parse($request->end);
+        $schedule->active = ($request->active)? 1 : 0;
+        $schedule->save();
+
+        return redirect()->route('admin.water.index')->withFlashSuccess("Data inserted!");
+    }
+
+    public function edit($id){
+
+        $schedule = WaterSchedule::findOrFail($id);
+        return view('backend.water.edit', compact('schedule'));
+    }
+
+    public function update(Request $request, $id){
+
+
+        $schedule         = WaterSchedule::findOrFail($id);
+        $schedule->start  = $request->start;
+        $schedule->end    = $request->end;
+        $schedule->active = ($request->active)? 1 : 0;
+        $schedule->save();
+
+        return redirect()->back()->withFlashSuccess("Data updated!");
+
     }
 }

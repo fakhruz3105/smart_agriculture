@@ -205,3 +205,21 @@ if(!function_exists('getLive')){
         return $live;
     }
 }
+
+if(!function_exists('reformatDateTime')){
+    function reformatDateTime($datetime, $format = "d-m-Y H:i:s"){
+        return Carbon::parse($datetime)->format($format);
+    }
+}
+
+if(!function_exists('getDiffTime')){
+    function getDiffTime($start, $end){
+
+        $start = Carbon::parse($start);
+        $end   = Carbon::parse($end);
+
+        $diff = $start->diff($end);
+
+        return $diff->h." hours ".$diff->i." minutes";
+    }
+}
