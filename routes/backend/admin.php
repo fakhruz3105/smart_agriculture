@@ -22,6 +22,8 @@ Route::group([
     Route::post('create', [WaterController::class, 'store'])->name('store');
     Route::get('edit/{id}', [WaterController::class, 'edit'])->name('edit');
     Route::post('edit/{id}', [WaterController::class, 'update'])->name('update');
+    Route::get('delete/{id}', [WaterController::class, 'delete'])->name('delete');
+
 
 
     Route::get('valve-switch', [WaterController::class, 'valveSwitch'])->name('valve-switch');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Domains\Auth\Http\Requests\Backend\Water\ChangeRequest;
 use App\Http\Requests\Backend\Water\CreateRequest;
+use App\Http\Requests\Water\InsertRequest;
 use App\Models\Dataset;
 use App\Models\DataSummary;
 use App\Models\Setting;
@@ -32,7 +33,7 @@ class WaterController
         }while($day <= 7);
 
 
-        $schedules = WaterSchedule::get();
+        $schedules = WaterSchedule::where('executed', 0)->get();
 
 
         return view('backend.water.index', compact('data', 'schedules'));
@@ -100,12 +101,11 @@ class WaterController
         return view('backend.water.create');
     }
 
-    public function store(CreateRequest $request){
+    public function store(InsertRequest $request){
 
         $schedule         = new WaterSchedule();
-        $schedule->start  = Carbon::parse($request->start);
-        $schedule->end    = Carbon::parse($request->end);
-        $schedule->active = ($request->active)? 1 : 0;
+        $schedule->date   = Carbon::parse($request->date);
+        $schedule->time   = Carbon::parse($request->time);
         $schedule->save();
 
         return redirect()->route('admin.water.index')->withFlashSuccess("Data inserted!");
@@ -117,16 +117,23 @@ class WaterController
         return view('backend.water.edit', compact('schedule'));
     }
 
-    public function update(Request $request, $id){
+    public function update(InsertRequest $request, $id){
 
 
-        $schedule         = WaterSchedule::findOrFail($id);
-        $schedule->start  = $request->start;
-        $schedule->end    = $request->end;
-        $schedule->active = ($request->active)? 1 : 0;
+        $schedule         = WaterSchedule::where('executed', 0)->findOrFail($id);
+        $schedule->date   = Carbon::parse($request->date);
+        $schedule->time  = Carbon::parse($request->time);
         $schedule->save();
 
-        return redirect()->back()->withFlashSuccess("Data updated!");
+        return redirect()->back()->withInput()->withFlashSuccess("Data updated!");
+    }
+
+    public function delete($id){
+
+        $schedule         = WaterSchedule::findOrFail($id);
+        $schedule->delete();
+
+        return redirect()->back()->withFlashSuccess("Data deleted!");
 
     }
 }

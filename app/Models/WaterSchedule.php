@@ -6,4 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 class WaterSchedule extends Model
 {
 //    protected $table = 'water_usages';
+
+    protected $fillable = ['executed'];
 }

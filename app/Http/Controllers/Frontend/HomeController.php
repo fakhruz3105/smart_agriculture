@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Models\Dataset;
 use App\Models\DataSummary;
 use App\Models\Setting;
+use App\Models\WaterSchedule;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\VarDumper\Cloner\Data;
@@ -130,6 +131,28 @@ class HomeController
 
 //        return $setting->value;
         return response()->json(['data' => $setting->value]);
+    }
+
+    public function waterSchedule(Request $request){
+
+        $key = env('PI_KEY', 'MSJ9ZXIGyli0pbpEmKmZyhjee660U4dy');
+
+        if($request->key != $key){
+            return response()->json(['status' => 'error', 'message' => 'Invalid PI key!']);
+        }
+
+        $schedule = WaterSchedule::whereDate('date', Carbon::today())
+            ->whereDate('time', '>', Carbon::now()->format('H:i:s'))
+            ->where('executed', 0)
+            ->first();
+
+        if($schedule){
+            $schedule->update(['executed' => 1]);
+            return response()->json(['data' => true]);
+
+        }
+
+        return response()->json(['data' => false]);
     }
 
     public function updateSummary(){

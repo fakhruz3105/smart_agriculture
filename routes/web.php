@@ -35,5 +35,6 @@ Route::get('cron/summary', [HomeController::class, 'updateSummary'])->name('cron
 
 Route::get('api/pi3-insert',[HomeController::class, 'pi3'])->name('api.send');
 Route::get('api/pi3-valve',[HomeController::class, 'pi3Valve'])->name('api.valve');
+Route::get('api/water',[HomeController::class, 'waterSchedule'])->name('api.water');
 
 

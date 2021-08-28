@@ -34,22 +34,20 @@
                         <table class="table table-striped">
                            <thead>
                            <tr>
+                               <th>Date</th>
                                <th>Time</th>
-                               <th>Duration</th>
-                               <th>Active</th>
                                <th>Action</th>
                            </tr>
                            </thead>
                            <tbody>
                            @foreach($schedules as $schedule)
                                <tr>
-                                   <td>{{ reformatDateTime($schedule->start, "h:i A")." - ".reformatDateTime($schedule->end, "h:i A") }}</td>
-                                   <td>{{ getDiffTime($schedule->start, $schedule->end) }}</td>
-                                   <td>
-                                        {!! ($schedule->active == 1)? "<span class='badge badge-success'>Active</span>" : "<span class='badge badge-dark'>Inactive</span>" !!}
-                                   </td>
+                                   <td>{{ reformatDateTime($schedule->date, "d-M-Y") }}</td>
+                                   <td>{{ reformatDateTime($schedule->time, "h:i A") }}</td>
                                    <td>
                                        <a href="{{ route('admin.water.edit', $schedule->id) }}"  class="btn btn-info btn-sm">Edit</a>
+                                       <a href="{{ route('admin.water.delete', $schedule->id) }}" onclick="return confirm('Are you sure want to delete this data?')"  class="btn btn-danger btn-sm">Delete</a>
+
                                    </td>
 
                                </tr>

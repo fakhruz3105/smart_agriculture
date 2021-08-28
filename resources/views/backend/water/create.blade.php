@@ -17,13 +17,10 @@
                     <div class="white_card_body">
                         <x-forms.post :action="route('admin.water.store')">
                             <div class="form-group">
-                                <input type="time" name="start" id="start" class="form-control timepicker" placeholder="{{ __('Start Time') }}" value="{{ old('start') }}" />
+                                <input type="date" name="date" id="start" class="form-control datepicker" placeholder="{{ __('Start Time') }}" value="{{ old('date') }}" />
                             </div>
                             <div class="form-group">
-                                <input type="time" name="end" id="end" class="form-control timepicker" placeholder="{{ __('End Time') }}" value="{{ old('end') }}" />
-                            </div>
-                            <div class="form-group">
-                                <input type="checkbox" name="active" id="active" class="checkbox"  value="1" ><label for="active" class=""> Active</label>
+                                <input type="time" name="time" id="time" class="form-control timepicker" placeholder="{{ __('End Time') }}" value="{{ old('time') }}" />
                             </div>
                             <button type="submit" class="btn btn-success text-center">Create</button>
                             <button type="submit" class="btn btn-dark text-center">Back</button>
