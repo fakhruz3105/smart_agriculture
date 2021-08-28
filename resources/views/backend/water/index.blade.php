@@ -10,19 +10,6 @@
                     <div class="white_card_header">
                         <div class="box_header m-0">
                             <div class="main-title">
-                                <h3 class="m-0">Water Report</h3>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="white_card_body">
-                        <div id="chart"></div>
-                    </div>
-                </div>
-
-                <div class="white_card  mb_30">
-                    <div class="white_card_header">
-                        <div class="box_header m-0">
-                            <div class="main-title">
                                 <h3 class="m-0">Auto Watering Schedule</h3>
                             </div>
                         </div>
