@@ -142,7 +142,7 @@ class HomeController
         }
 
         $schedule = WaterSchedule::whereDate('date', Carbon::today())
-            ->whereDate('time', '>', Carbon::now()->format('H:i:s'))
+            ->whereDate('time', '>', Carbon::now())
             ->where('executed', 0)
             ->first();
 
