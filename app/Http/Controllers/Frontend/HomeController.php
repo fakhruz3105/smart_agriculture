@@ -142,14 +142,17 @@ class HomeController
         }
 
         $schedule = WaterSchedule::whereDate('date', Carbon::today())
-            ->whereDate('time', '>', Carbon::now()->format('h:i:s'))
+//            ->whereDate('time', '>', Carbon::now()->format('h:i:s'))
             ->where('executed', 0)
             ->first();
 
         if($schedule){
-            $schedule->update(['executed' => 1]);
-            return response()->json(['data' => true]);
 
+            $datetime = Carbon::parse($schedule->date." ".$schedule->time);
+            if($datetime > Carbon::now()){
+                $schedule->update(['executed' => 1]);
+                return response()->json(['data' => true]);
+            }
         }
 
         return response()->json(['data' => false]);
