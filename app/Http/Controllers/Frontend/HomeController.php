@@ -149,7 +149,7 @@ class HomeController
         if($schedule){
 
             $datetime = Carbon::parse($schedule->date." ".$schedule->time);
-            if($datetime > Carbon::now()){
+            if($datetime < Carbon::now()){
                 $schedule->update(['executed' => 1]);
                 return response()->json(['data' => true]);
             }
