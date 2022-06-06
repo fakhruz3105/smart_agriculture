@@ -212,6 +212,12 @@ if(!function_exists('reformatDateTime')){
     }
 }
 
+if(!function_exists('reformatTimestamp')){
+    function reformatTimestamp($datetime, $format = "d-m-Y H:i:s"){
+        return Carbon::createFromTimestamp($datetime)->format($format);
+    }
+}
+
 if(!function_exists('getDiffTime')){
     function getDiffTime($start, $end){
 

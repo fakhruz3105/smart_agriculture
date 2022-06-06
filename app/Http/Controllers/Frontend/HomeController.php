@@ -10,7 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\VarDumper\Cloner\Data;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Log;
 
 class HomeController
 {
@@ -32,7 +32,7 @@ class HomeController
         $data_summary = json_decode($summary->collection);
 
         $graph_collect = $today_data = Dataset::whereDate('created_at', Carbon::today())
-            ->orderBy('id', 'DESC')
+            ->orderBy('created_at', 'DESC')
             ->limit(15)
             ->get()
             ->collect();
@@ -42,7 +42,7 @@ class HomeController
         $ph = [];
         $categories = [];
         foreach ($graph_collect as $collect){
-            $categories[] = Carbon::parse($collect->created_at)->format('h:i A');
+            $categories[] = Carbon::parse($collect->created_at)->timestamp;
             $humidity[] = round($collect->humidity, 2);
             $ph[] = round($collect->ph, 2);
             $temperature[] = round($collect->temperature, 2);
@@ -90,24 +90,26 @@ class HomeController
     }
 
     public function insert(){
+        Log::info('Called');
+        for ($x = 0; $x <= 20; $x++) {
+            $new_data = new Dataset();
+            $new_data->humidity = rand(7, 30);
+            $new_data->ph = rand(3.1, 8.9);
+            $new_data->temperature = rand(18.1, 38.9);
+            $new_data->save();
+            updateLive($new_data->humidity, $new_data->ph, $new_data->temperature);
+        }
 
-        $new_data = new Dataset();
-        $new_data->humidity = rand(7, 30);
-        $new_data->ph = rand(3.1, 8.9);
-        $new_data->temperature = rand(18.1, 38.9);
-        $new_data->save();
-
-        updateLive($new_data->humidity, $new_data->ph, $new_data->temperature);
         return redirect()->back()->withFlashSuccess('New data inserted.');
     }
 
     public function pi3(Request $request){
 
-        $key = env('PI_KEY', 'MSJ9ZXIGyli0pbpEmKmZyhjee660U4dy');
+        $key = env('PI_KEY', \config('pi.key'));
 
-        if($request->key != $key){
-            return response()->json(['status' => 'error', 'message' => 'Invalid PI key!']);
-        }
+        // if($request->key != $key){
+        //     return response()->json(['status' => 'error', 'message' => 'Invalid PI key!']);
+        // }
 
         $new_data = new Dataset();
         $new_data->humidity = $request->humidity;
@@ -121,7 +123,7 @@ class HomeController
 
     public function pi3Valve(Request $request){
 
-        $key = env('PI_KEY', 'MSJ9ZXIGyli0pbpEmKmZyhjee660U4dy');
+        $key = env('PI_KEY', \config('pi.key'));
 
         if($request->key != $key){
             return response()->json(['status' => 'error', 'message' => 'Invalid PI key!']);
@@ -135,7 +137,7 @@ class HomeController
 
     public function waterSchedule(Request $request){
 
-        $key = env('PI_KEY', 'MSJ9ZXIGyli0pbpEmKmZyhjee660U4dy');
+        $key = env('PI_KEY', \config('pi.key'));
 
         if($request->key != $key){
             return response()->json(['status' => 'error', 'message' => 'Invalid PI key!']);
@@ -197,7 +199,6 @@ class HomeController
         $summary->save();
 
         return response()->json(['success', 'message' => 'Summary data updated!']);
-
     }
 
     public function old(){

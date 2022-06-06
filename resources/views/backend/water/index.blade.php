@@ -29,8 +29,8 @@
                            <tbody>
                            @foreach($schedules as $schedule)
                                <tr>
-                                   <td>{{ reformatDateTime($schedule->date, "d-M-Y") }}</td>
-                                   <td>{{ reformatDateTime($schedule->time, "h:i A") }}</td>
+                                   <td>{{ reformatTimestamp($schedule->execution, "d-M-Y") }}</td>
+                                   <td>{{ reformatTimestamp($schedule->execution, "h:i A") }}</td>
                                    <td>
                                        <a href="{{ route('admin.water.edit', $schedule->id) }}"  class="btn btn-info btn-sm">Edit</a>
                                        <a href="{{ route('admin.water.delete', $schedule->id) }}" onclick="return confirm('Are you sure want to delete this data?')"  class="btn btn-danger btn-sm">Delete</a>

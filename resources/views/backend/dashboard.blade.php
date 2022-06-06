@@ -98,7 +98,25 @@
                 }
             },
             xaxis: {
-                categories: @json($categories)
+                type: 'numeric',
+                categories: @json($categories),
+                tickAmount: 10,
+                labels: {
+                    formatter: (value) => {
+                        const date = new Date(parseInt(value) * 1000)
+                        const hour = `0${date.getHours() % 12 || 12}`.slice(-2)
+                        const minute = `0${date.getMinutes()}`.slice(-2)
+                        const amPm = Math.floor(date.getHours() / 12) === 0 ? 'AM' : 'PM'
+                        return `${hour}:${minute} ${amPm}`
+                    }
+                }
+            },
+            yaxis: {
+                labels: {
+                    formatter: (val) => {
+                        return val.toFixed(2)
+                    }
+                }
             }
         };
 
@@ -134,6 +152,13 @@
                 axisTicks: {
                     show: false
                 },
+            },
+            yaxis: {
+                labels: {
+                    formatter: (val) => {
+                        return val.toFixed(2)
+                    }
+                }
             },
             colors: [ "#F65365" , "#0b7bd6", "#2be314"],
 

@@ -4,6 +4,9 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use App\Models\WaterSchedule;
+use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
 
 /**
  * Class Kernel.
@@ -27,7 +30,24 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('activitylog:clean')->daily();
+        $water_schedules = WaterSchedule::where('executed',0)
+            ->orderBy('execution', 'ASC')
+            ->get()
+            ->collect();
+
+        foreach ($water_schedules as $schd) {
+            if ($schd->execution < Carbon::now()->timestamp) {
+                $schd->executed = true;
+                $schd->save();
+            } else {
+                $carbon = Carbon::createFromTimestamp($schd->execution);
+                $cron = $carbon->isoFormat('m H D M *');
+                $schedule
+                    ->command(sprintf('start:pump %u', $schd->id))
+                    ->cron($cron)
+                    ->withoutOverlapping();
+            }
+        }
     }
 
     /**

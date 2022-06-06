@@ -29,7 +29,7 @@ class DashboardController
         $data_summary = json_decode($summary->collection);
 
         $graph_collect = $today_data = Dataset::whereDate('created_at', Carbon::today())
-            ->orderBy('id', 'DESC')
+            ->orderBy('created_at', 'DESC')
             ->limit(15)
             ->get()
             ->collect();
@@ -37,7 +37,7 @@ class DashboardController
         $temperature = $humidity = $ph = [];
         $categories = [];
         foreach ($graph_collect as $collect){
-            $categories[] = Carbon::parse($collect->created_at)->format('h:i A');
+            $categories[] = Carbon::parse($collect->created_at)->timestamp;
             $humidity[] = $collect->humidity;
             $ph[] = $collect->ph;
             $temperature[] = $collect->temperature;
